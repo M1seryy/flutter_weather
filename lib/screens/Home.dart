@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
+import 'package:weather_app/models/dayWeather.dart';
 import 'package:weather_app/models/weather.dart';
 import 'package:weather_app/screens/CitySearch.dart';
 import 'package:weather_app/service/weatherService.dart';
@@ -17,11 +18,15 @@ class _HomeState extends State<Home> {
   final _weatherService =
       Weatherservice(api_key: "35eb3d4fe816cd13a92a10c20fb6258b");
   Weather? _weather;
+  Dayweather? _weatherList;
 
   _getDayWeather() async {
     try {
       final weatherList = await _weatherService.getWeatherByDays("kyiv");
-      print(weatherList);
+
+      setState(() {
+        _weatherList = weatherList;
+      });
     } catch (e) {
       print(e);
     }
@@ -44,6 +49,7 @@ class _HomeState extends State<Home> {
     super.initState();
     _fetchWeather();
     _getDayWeather();
+    print(_weatherList);
   }
 
   @override

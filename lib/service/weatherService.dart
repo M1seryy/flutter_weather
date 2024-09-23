@@ -27,10 +27,7 @@ class Weatherservice {
     cityName ??= "kyiv";
 
     final responce = await http.get(Uri.parse(
-        'api.openweathermap.org/data/2.5/forecast?q=$cityName&appid=35eb3d4fe816cd13a92a10c20fb6258b'));
-
-    print(responce);
-
+        'https://api.openweathermap.org/data/2.5/forecast?q=$cityName&appid=35eb3d4fe816cd13a92a10c20fb6258b'));
     if (responce.statusCode == 200) {
       return Dayweather.fromJson(jsonDecode(responce.body));
     } else {
