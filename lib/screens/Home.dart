@@ -1,8 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
+import 'package:weather_app/models/weather.dart';
+import 'package:weather_app/screens/CitySearch.dart';
+import 'package:weather_app/service/weatherService.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -12,23 +14,36 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Map<String, dynamic>> weatherData = [];
-  String city = "";
-  Future<Map<String, dynamic>> fetchData() async {
-    final responce = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?appid=35eb3d4fe816cd13a92a10c20fb6258b&q=Kyiv'));
+  final _weatherService =
+      Weatherservice(api_key: "35eb3d4fe816cd13a92a10c20fb6258b");
+  Weather? _weather;
 
-    if (responce.statusCode == 200) {
-      final data = jsonDecode(responce.body);
-      print(data.coord);
-      setState(() {
-        // weatherData = data;
-        // city = data.main.name;
-      });
-      return data;
-    } else {
-      throw Exception("!23");
+  _getDayWeather() async {
+    try {
+      final weatherList = await _weatherService.getWeatherByDays("kyiv");
+      print(weatherList);
+    } catch (e) {
+      print(e);
     }
+  }
+
+  _fetchWeather() async {
+    try {
+      final weather = await _weatherService.getWeather("kyiv");
+      setState(() {
+        _weather = weather;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _fetchWeather();
+    _getDayWeather();
   }
 
   @override
@@ -36,8 +51,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          city,
-          style: TextStyle(fontSize: 30, color: Colors.white),
+          _weather?.cityName ?? "---",
+          style: const TextStyle(fontSize: 30, color: Colors.white),
         ),
         backgroundColor: const Color.fromARGB(255, 38, 86, 141),
       ),
@@ -74,8 +89,8 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                  const Text(
-                    "23",
+                  Text(
+                    '${_weather?.temp.round()}',
                     style: TextStyle(
                         fontSize: 70,
                         color: Colors.white,
@@ -88,13 +103,132 @@ class _HomeState extends State<Home> {
                         fontSize: 12,
                         fontWeight: FontWeight.w600),
                   ),
-                  IconButton(
-                      onPressed: () {
-                        fetchData();
-                      },
-                      icon: Icon(Icons.check_circle))
+                  Container(
+                    width: 294,
+                    padding: EdgeInsets.only(top: 13),
+                    margin: EdgeInsets.only(top: 20),
+                    height: 95,
+                    decoration: BoxDecoration(
+                        color: Color.fromARGB(40, 239, 239, 239),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Image.asset(
+                              'assets/recipitation.png',
+                              width: 30,
+                              height: 30,
+                            ),
+                            const Text('30% ',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white)),
+                            const Text('Precipitation',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white)),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Column(
+                          children: [
+                            Image.asset(
+                              'assets/humidity.png',
+                              width: 30,
+                              height: 30,
+                            ),
+                            Text('${_weather?.humidity.round()} %',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white)),
+                            Text('Humidity',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white)),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Column(
+                          children: [
+                            Image.asset(
+                              'assets/wind.png',
+                              width: 30,
+                              height: 30,
+                            ),
+                            Text('${_weather?.wind_speed} km/h',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white)),
+                            Text('Wind Speed',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white)),
+                          ],
+                        )
+                        // Text(
+                        //   "30% Precipitation",
+                        //   style: TextStyle(fontSize: 15),
+                        // ),
+                      ],
+                    ),
+                  )
                 ],
-              ))
+              )),
+              Container(
+                child: Expanded(
+                    child: Align(
+                  alignment: FractionalOffset.bottomCenter,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.home_filled),
+                        onPressed: () {},
+                      ),
+                      SizedBox(
+                        width: 63,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const Citysearch(),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        width: 63,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.account_circle),
+                        onPressed: () {},
+                      ),
+                      SizedBox(
+                        width: 63,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.notifications),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                )),
+              )
             ]),
           )),
     );
