@@ -6,6 +6,7 @@ import 'package:weather_app/models/weather.dart';
 import 'package:weather_app/screens/CitySearch.dart';
 import 'package:weather_app/service/weatherService.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:weather_app/widgets/weekWeather.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -15,6 +16,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final List weekList = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+  ];
   final _weatherService =
       Weatherservice(api_key: "35eb3d4fe816cd13a92a10c20fb6258b");
   Weather? _weather;
@@ -58,8 +67,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          // _weather?.cityName ?? "---",
-          (_weatherList?.dayForecast[0]['main']['temp']).toString() ?? "---",
+          _weather?.cityName ?? "---",
+          // (_weatherList?.dayForecast[0]['main']['temp']).toString() ?? "---",
           style: const TextStyle(fontSize: 30, color: Colors.white),
         ),
         backgroundColor: const Color.fromARGB(255, 38, 86, 141),
@@ -195,6 +204,23 @@ class _HomeState extends State<Home> {
                 ],
               )),
               Container(
+                margin: EdgeInsets.only(top: 20),
+                width: 400,
+                height: 300,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Color.fromARGB(40, 239, 239, 239),
+                ),
+                child: ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: 6,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Weekweather(
+                        weekDay: weekList[index],
+                      );
+                    }),
+              ),
+              Container(
                 child: Expanded(
                     child: Align(
                   alignment: FractionalOffset.bottomCenter,
@@ -236,7 +262,7 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 )),
-              )
+              ),
             ]),
           )),
     );
