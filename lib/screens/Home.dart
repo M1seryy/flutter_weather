@@ -23,7 +23,9 @@ class _HomeState extends State<Home> {
   _getDayWeather() async {
     try {
       final weatherList = await _weatherService.getWeatherByDays("kyiv");
-
+      print(weatherList.dayForecast[0]['main']['temp']);
+      print(_weatherList?.dayForecast);
+      // print(weatherList.message);
       setState(() {
         _weatherList = weatherList;
       });
@@ -49,7 +51,6 @@ class _HomeState extends State<Home> {
     super.initState();
     _fetchWeather();
     _getDayWeather();
-    print(_weatherList);
   }
 
   @override
@@ -57,7 +58,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _weather?.cityName ?? "---",
+          // _weather?.cityName ?? "---",
+          (_weatherList?.dayForecast[0]['main']['temp']).toString() ?? "---",
           style: const TextStyle(fontSize: 30, color: Colors.white),
         ),
         backgroundColor: const Color.fromARGB(255, 38, 86, 141),

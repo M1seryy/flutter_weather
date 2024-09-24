@@ -1,10 +1,14 @@
 import 'package:weather_app/models/weather.dart';
 
 class Dayweather {
-  final List<Weather> dayForecast;
+  final double message;
+  final List dayForecast;
 
-  Dayweather({required this.dayForecast});
+  Dayweather({required this.message, required this.dayForecast});
+
   factory Dayweather.fromJson(Map<String, dynamic> json) {
-    return Dayweather(dayForecast: json['list']);
+    return Dayweather(
+        message: json['message'].toDouble(),
+        dayForecast: json['list']);
   }
 }
