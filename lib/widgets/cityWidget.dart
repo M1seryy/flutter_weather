@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CityWidget extends StatelessWidget {
-  const CityWidget({super.key});
+  final String cityName;
+  final String conditions;
+  const CityWidget(
+      {super.key, required this.cityName, required this.conditions});
 
   @override
   Widget build(BuildContext context) {
@@ -11,14 +14,7 @@ class CityWidget extends StatelessWidget {
       width: 320,
       height: 90,
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color.fromARGB(183, 149, 125, 205),
-              Color.fromARGB(183, 82, 61, 127),
-            ],
-          ),
+          color: Color.fromARGB(40, 239, 239, 239),
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,14 +23,14 @@ class CityWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Surat",
+                cityName,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.white),
               ),
               Text(
-                "Cloudy",
+                conditions,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,

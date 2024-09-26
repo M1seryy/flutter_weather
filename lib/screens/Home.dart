@@ -32,8 +32,8 @@ class _HomeState extends State<Home> {
   _getDayWeather() async {
     try {
       final weatherList = await _weatherService.getWeatherByDays("kyiv");
-      print(weatherList.dayForecast[0]['main']['temp']);
-      print(_weatherList?.dayForecast);
+      // print(weatherList.dayForecast[0]['main']['temp']);
+      // print(_weatherList?.dayForecast);
       // print(weatherList.message);
       setState(() {
         _weatherList = weatherList;
@@ -216,8 +216,16 @@ class _HomeState extends State<Home> {
                     itemCount: 6,
                     itemBuilder: (BuildContext context, int index) {
                       return Weekweather(
-                        weekDay: weekList[index],
-                      );
+                          weekDay: weekList[index],
+                          minTemp: _weatherList?.dayForecast[index]['main']
+                                  ['temp_min'] ??
+                              0,
+                          maxTemp: _weatherList?.dayForecast[index]['main']
+                                  ['temp_max'] ??
+                              0,
+                          weatherType: _weatherList?.dayForecast[index]
+                                  ['weather'][0]['main'] ??
+                              "-");
                     }),
               ),
               Container(

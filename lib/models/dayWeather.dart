@@ -8,7 +8,6 @@ class Dayweather {
 
   factory Dayweather.fromJson(Map<String, dynamic> json) {
     return Dayweather(
-        message: json['message'].toDouble(),
-        dayForecast: json['list']);
+        message: json['message'].toDouble(), dayForecast: json['list']);
   }
 }

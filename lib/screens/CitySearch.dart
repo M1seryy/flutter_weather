@@ -1,9 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:weather_app/models/weather.dart';
 import 'package:weather_app/widgets/cityWidget.dart';
 
-class Citysearch extends StatelessWidget {
+class Citysearch extends StatefulWidget {
   const Citysearch({super.key});
+
+  @override
+  State<Citysearch> createState() => _CitysearchState();
+}
+
+class _CitysearchState extends State<Citysearch> {
+  final _searchController = TextEditingController();
+  final List<Map<String, dynamic>> _cityAraay = [
+    {
+      "cityName": "Kyiv",
+      "temp": 25,
+      "conditions": "Sunny",
+      "humidity": 87,
+      "wind_speed": 20,
+    },
+    {
+      "cityName": "London",
+      "temp": 85,
+      "conditions": "Rainy",
+      "humidity": 87,
+      "wind_speed": 20,
+    }
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -26,31 +50,33 @@ class Citysearch extends StatelessWidget {
             child: Column(children: [
               Container(
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color.fromARGB(183, 149, 125, 205),
-                        Color.fromARGB(183, 82, 61, 127),
-                      ],
-                    ),
-                    // color: Color.fromARGB(210, 138, 91, 240),
+                    color: Color.fromARGB(40, 239, 239, 239),
                     borderRadius: BorderRadius.circular(10)),
-                child: const TextField(
-                  // controller: _todoController,
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) => {print(value)},
                   decoration: InputDecoration(
                       prefixIcon: Icon(Icons.search),
                       suffixIcon: Icon(Icons.location_on_rounded),
                       contentPadding: EdgeInsets.all(10),
-                      hintText: "Add a new todo item",
+                      hintText: "Add a new city",
                       border: InputBorder.none),
                 ),
               ),
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  print("1");
+                },
+              ),
               Expanded(
                 child: ListView.builder(
-                    itemCount: 2,
+                    itemCount: _cityAraay.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return const CityWidget();
+                      return const CityWidget(
+                        cityName: "123",
+                        conditions: "Good",
+                      );
                     }),
               )
             ]),

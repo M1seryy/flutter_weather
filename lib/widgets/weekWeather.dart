@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 
 class Weekweather extends StatelessWidget {
   final String weekDay;
+  final double minTemp;
+  final double maxTemp;
+  final String weatherType;
 
-  const Weekweather({super.key, required this.weekDay});
+  const Weekweather(
+      {super.key,
+      required this.weekDay,
+      required this.minTemp,
+      required this.maxTemp,
+      required this.weatherType});
 
   @override
   Widget build(BuildContext context) {
+    print(weatherType);
     return Row(
       children: [
         SizedBox(
@@ -20,7 +29,7 @@ class Weekweather extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 67,
+          width: 20,
         ),
         Image.asset(
           "assets/cloudy.png",
@@ -29,16 +38,18 @@ class Weekweather extends StatelessWidget {
         SizedBox(
           width: 6,
         ),
-        Text(
-          "Sunny",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w400, fontSize: 15),
+        Expanded(
+          child: Text(
+            weatherType.toString(),
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w400, fontSize: 15),
+          ),
         ),
         SizedBox(
           width: 44,
         ),
         Text(
-          "+31",
+          (maxTemp).round().toString(),
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16),
         ),
@@ -46,7 +57,7 @@ class Weekweather extends StatelessWidget {
           width: 10,
         ),
         Text(
-          "+25",
+          (minTemp).round().toString(),
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16),
         ),
