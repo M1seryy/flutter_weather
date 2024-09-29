@@ -6,9 +6,8 @@ import 'package:http/http.dart' as http;
 
 class Weatherservice {
   static const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
-  final String api_key;
 
-  Weatherservice({required this.api_key});
+  Weatherservice();
 
   Future<Weather> getWeather(String cityName) async {
     cityName ??= "kyiv";
@@ -17,6 +16,7 @@ class Weatherservice {
         'https://api.openweathermap.org/data/2.5/weather?appid=35eb3d4fe816cd13a92a10c20fb6258b&q=$cityName&units=metric'));
 
     if (responce.statusCode == 200) {
+      // print(responce.body);
       return Weather.fromJson(jsonDecode(responce.body));
     } else {
       throw Exception("Faild to load weather data");

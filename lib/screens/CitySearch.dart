@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:weather_app/models/weather.dart';
+import 'package:weather_app/service/weatherService.dart';
 import 'package:weather_app/widgets/cityWidget.dart';
 
 class Citysearch extends StatefulWidget {
@@ -12,21 +13,22 @@ class Citysearch extends StatefulWidget {
 
 class _CitysearchState extends State<Citysearch> {
   final _searchController = TextEditingController();
-  final List<Map<String, dynamic>> _cityAraay = [
-    {
-      "cityName": "Kyiv",
-      "temp": 25,
-      "conditions": "Sunny",
-      "humidity": 87,
-      "wind_speed": 20,
-    },
-    {
-      "cityName": "London",
-      "temp": 85,
-      "conditions": "Rainy",
-      "humidity": 87,
-      "wind_speed": 20,
-    }
+  Weather? _weatherInCity;
+  List<Weather> _cityAraay = [
+    // {
+    //   "cityName": "Kyiv",
+    //   "temp": 25,
+    //   "conditions": "Sunny",
+    //   "humidity": 87,
+    //   "wind_speed": 20,
+    // },
+    // {
+    //   "cityName": "London",
+    //   "temp": 85,
+    //   "conditions": "Rainy",
+    //   "humidity": 87,
+    //   "wind_speed": 20,
+    // }
   ];
 
   @override
@@ -54,7 +56,6 @@ class _CitysearchState extends State<Citysearch> {
                     borderRadius: BorderRadius.circular(10)),
                 child: TextField(
                   controller: _searchController,
-                  onChanged: (value) => {print(value)},
                   decoration: InputDecoration(
                       prefixIcon: Icon(Icons.search),
                       suffixIcon: Icon(Icons.location_on_rounded),
@@ -65,17 +66,23 @@ class _CitysearchState extends State<Citysearch> {
               ),
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () {
-                  print("1");
+                onPressed: () async {
+                  final response =
+                      await Weatherservice().getWeather(_searchController.text);
+                  setState(() {
+                    _cityAraay.add(response);
+                  });
+
+                  // print(response.cityName);
                 },
               ),
               Expanded(
                 child: ListView.builder(
                     itemCount: _cityAraay.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return const CityWidget(
-                        cityName: "123",
-                        conditions: "Good",
+                      return CityWidget(
+                        cityName: _cityAraay[index].cityName,
+                        conditions: _cityAraay[index].conditions,
                       );
                     }),
               )

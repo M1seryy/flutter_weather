@@ -24,8 +24,7 @@ class _HomeState extends State<Home> {
     'Friday',
     'Saturday'
   ];
-  final _weatherService =
-      Weatherservice(api_key: "35eb3d4fe816cd13a92a10c20fb6258b");
+  final _weatherService = Weatherservice();
   Weather? _weather;
   Dayweather? _weatherList;
 
